@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+     - '9090:9090'
+    volumes:
+     - './prometheus.yml:/etc/prometheus/prometheus.yml'
+     - 'prometheus-data:/prometheus'
+    restart: always
+  pushgateway:
+    image: prom/pushgateway
+    container_name: pushgateway
+    restart: always
+    ports:
+      - '9091:9091'
+  go-app:
+    build: .
+    container_name: go-app
+    restart: always
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+volumes:
+  prometheus-data: {}
